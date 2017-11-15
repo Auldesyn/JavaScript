@@ -1,0 +1,139 @@
+// This constant is written in column H for rows for which an email
+// has been sent successfully.
+var EMAIL_SENT = "EMAIL_SENT";
+var sameday = "sameday"
+var needsemail = "needsemail"
+var emaildefault = "dafbiman@hotmail.com"
+var marchemail = "8018748208@pm.sprint.com"
+var joeemail = "8016367229@pm.sprint.com"
+var howardemail = "8019213642@vtext.com"
+var kentemail = "3855397939@myboostmobile.com"
+var joshemail = "8018503639@tmomail.net"
+
+
+function createTimeDrivenTriggers() {
+  // Trigger every 1 hours.
+  ScriptApp.newTrigger('runThings')
+      .timeBased()
+      .everyHours(1)
+  var sheet = SpreadsheetApp.getActiveSheet();
+  var sheetRange = sheet.getDataRange();
+  var startRow = 1;  // First row of data to process
+  var data = sheetRange.getValues();
+  // Fetch values for each row in the Range.
+  for (var i = 1; i < data.length; ++i) {
+   var row = data[i];
+  }
+}
+    
+function runThings() {
+      checkDate();
+      checkTime();
+      sendTexts(); 
+}
+
+function checkDate() {
+  var sheet = SpreadsheetApp.getActiveSheet();
+  var sheetRange = sheet.getDataRange();
+  var startRow = 1;  // First row of data to process
+  var data = sheetRange.getValues();
+  // Fetch values for each row in the Range.
+  for (var i = 1; i < data.length; ++i) {
+   var row = data[i];
+    var eventname = row[1];     // event name and email subject
+    var assigneddriver = row[0];     // driver name
+    var date = row[2];     // date of pickup
+  }
+  
+// Create two date objects with different times and timezone offsets.
+var date1 = new Date();
+var date2 = row[2];
+
+  if (sheet.getRange(startRow + i, 14).getValue() != EMAIL_SENT)  {
+// sets to true if dates are the same.
+ if (date1 == date2 +1) {
+  sheet.getRange(startRow + i, 14).setValue(date1.getDay() + ' ' + date2.getDay())
+  SpreadsheetApp.flush();
+}
+}
+ }
+
+function checkTime() {
+  
+  var sheet = SpreadsheetApp.getActiveSheet();
+  var sheetRange = sheet.getDataRange();
+  var startRow = 1;  // First row of data to process
+  // Fetch values for each row in the Range.
+  var data = sheetRange.getValues();
+  for (var i = 1; i < data.length; ++i) {
+   var row = data[i];
+    var eventname = row[1];     // event name and email subject
+    var assigneddriver = row[0];     // driver name
+    var date = row[2];     // date of pickup
+    var pickuptime = row[3];     // time of pickup
+  }
+  if (sheet.getRange(startRow + i, 14).getValue() == "sameday")  {
+  // Create two date objects with different times and timezone offsets.
+var now = new Date
+var time1 = new Date(now.getTime()+3);
+var time2 = row[3];
+
+// sets to true if dates are the same.
+if (time1.getHour() <= time2.getHour()) {
+  sheet.getRange(startRow + i, 14).setValue(needsemail)
+  SpreadsheetApp.flush();
+}
+}  
+}
+
+function sendTexts() {
+var March = "March"
+var Joseph = "Joseph"
+var Howard = "Howard"
+var Kent = "Kent"
+var Josh = "josh"
+  var sheet = SpreadsheetApp.getActiveSheet();
+  var sheetRange = sheet.getDataRange();
+  var startRow = 1;  // First row of data to process
+  // var numRows = 4;   // Number of rows to process
+  // Fetch the range of cells A2 to last active row
+  // Fetch values for each row in the Range.
+  var data = sheetRange.getValues();
+  for (var i = 1; i < data.length; ++i) {
+   var row = data[i];
+    var eventname = row[1];     // event name and email subject
+    var assigneddriver = row[0];     // driver name
+    var date = row[2];     // date of pickup
+    var pickuptime = row[3];     // time of pickup
+    var customername = row[4];     // customer's name
+    var pickuploc = row[11];     // where to pick up
+    var dropoffloc = row[12];     // where to drop off
+    var special = row[13];     // any special notes
+    var emailSent = row[14];     // did the email get sent?
+    var subject = eventname;
+    var message1 = assigneddriver + ',\n\n' + customername + ' has requested a pickup at ' + pickuploc + ' ' + pickuptime;
+    var message2 = ' and drop off at ' + dropoffloc + '.' + '\n' + 'special instructions are ' + special + '\n\n' + 'Text (801) 874-8208 to confirm reception of this text';
+    var message = message1 + message2
+    if (emailSent == "needsemail") {  // Prevents sending duplicates
+       if (assigneddriver == March) {
+         var emailAddress = marchemail ; 
+         } else if (assigneddriver == Howard) {
+         var emailAddress = howardemail ;
+         } else if (assigneddriver == Joseph) {
+         var emailAddress = joeemail ;
+         } else if (assigneddriver == Kent) {
+         var emailAddress = kentemail ;
+         } else if (assigneddriver == Josh) {
+         var emailAddress = joshemail ;
+         } else {
+           var emailAddress = emaildefault ;
+         } 
+           
+    // need to put in the if statement that says not to send emails if value is EMAIL_SENT
+     MailApp.sendEmail(emailAddress, subject, message);
+      sheet.getRange(startRow + i, 14).setValue("EMAIL_SENT");
+      // Make sure the cell is updated right away in case the script is interrupted
+       SpreadsheetApp.flush();
+     }
+  }
+}
